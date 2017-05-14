@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base target="_blank">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Dirty COW (CVE-2016-5195) is a privilege escalation vulnerability in the Linux Kernel.">
+
+    <title>Dirty COW (CVE-2016-5195)</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>body{padding-top:20px;padding-bottom:20px}.header,.marketing,.footer{padding-right:15px;padding-left:15px}.header{padding-bottom:20px;border-bottom:1px solid #e5e5e5}.header h3{margin-top:0;margin-bottom:0;line-height:40px}.footer{padding-top:19px;color:#777;border-top:1px solid #e5e5e5}@media (min-width:768px){.container{max-width:730px}}.container-narrow>hr{margin:30px 0}.jumbotron{text-align:center;border-bottom:1px solid #e5e5e5}.jumbotron .btn{padding:14px 24px;font-size:21px}.marketing{margin:40px 0}.marketing p+h4{margin-top:28px}@media screen and (min-width:768px){.header,.marketing,.footer{padding-right:0;padding-left:0}.header{margin-bottom:30px}.jumbotron{border-bottom:0}}</style>
+  </head>
+
+  <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script>
+    <a href="https://github.com/dirtycow/dirtycow.github.io"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="#" target="_self">Home</a></li>
+            <li role="presentation"><a href="//twitter.com/DirtyCOWVuln">Twitter</a></li>
+            <li role="presentation"><a href="//github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails">Wiki</a></li>
+            <li role="presentation"><a href="//www.zazzle.com/collections/white_theme-119587962650451153">Shop</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">CVE-2016-5195 <div class="fb-like" data-href="https://www.facebook.com/Dirty-COW-Vulnerability-1203812509677078/" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></h3>
+      </div>
+
+      <div class="jumbotron">
+        <div title="This logo is on the public domain. Feel free to do whatever you want with it." style="background-image: url(cow.svg); background-repeat: no-repeat; background-position: 50% 50%; width: 100%; background-size: 1024px; height: 400px;"></div>
+        <p class="lead">Dirty COW (CVE-2016-5195) is a privilege escalation vulnerability in the Linux Kernel</p>
+        <p>
+          <a class="btn btn-lg btn-success" href="https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs" role="button">View Exploit</a>
+          <a class="btn btn-lg btn-default" href="//github.com/dirtycow/dirtycow.github.io/wiki/VulnerabilityDetails" role="button">Details</a>
+        </p>
+      </div>
+
+      <div class="row marketing">
+        <div><h2>FAQ</h2></div>
+        <div class="col-lg-6">
+          <h4>What is the CVE-2016-5195?</h4>
+          <p>CVE-2016-5195 is the official reference to this bug. CVE (Common Vulnerabilities and Exposures) is the Standard for Information Security Vulnerability Names maintained by MITRE.</p>
+
+          <h4>Why is it called the Dirty COW bug?</h4>
+          <p>"<em>A <a href="https://en.wikipedia.org/wiki/Race_condition">race condition</a> was found in the way the Linux kernel's memory subsystem handled the copy-on-write (COW) breakage of private read-only memory mappings. An unprivileged local user could use this flaw to gain write access to otherwise read-only memory mappings and thus increase their privileges on the system.</em>" (<a href="https://bugzilla.redhat.com/show_bug.cgi?id=1384344#">RH</a>)</p>
+
+          <h4>What makes the Dirty COW bug unique?</h4>
+          <p>In fact, all the boring normal bugs are _way_ more important, just because there's a lot more of them. I don't think some spectacular security hole should be glorified or cared about as being any more "special" than a random spectacular crash due to bad locking.</p>
+          
+          <h4>Anyone sharing or have details about the "<a href="https://twitter.com/timstrazz/status/788966208754241536">in the wild exploit</a>"?</h4>
+          <p>An exploit using this technique has been found in the wild from an HTTP packet capture according to <a href="http://www.v3.co.uk/v3-uk/news/2474845/linux-users-urged-to-protect-against-dirty-cow-security-flaw">Phil Oester</a>.</p>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>How do I use this document?</h4>
+          <p>This FAQ provides answers to some of the most frequently asked questions regarding the Dirty COW vulnerability. This is a living document and will be updated regularly at <a href="https://dirtycow.ninja">https://dirtycow.ninja</a>.</p>
+          
+          <h4>Am I affected by the bug?</h4>
+          <p><script>document.write(navigator.userAgent.match(/Linux|Android/)?'Yes':'Nope')</script>.</p>
+
+          <h4>Can my antivirus detect or block this attack?</h4>
+          <p>Although the attack can happen in different layers, antivirus signatures that detect Dirty COW could be developed. Due to the attack complexity, differentiating between legitimate use and attack cannot be done easily, but the attack may be detected by comparing the size of the binary against the size of the original binary. This implies that antivirus can be programmed to detect the attack but not to block it unless binaries are blocked altogether.</p>
+          
+          <h4>Is this an OpenSSL bug?</h4>
+          <p><a href="https://media.giphy.com/media/jA4T01RxBv77W/giphy.gif">No</a>.</p>
+          
+          <h4>Where can I find more information?</h4>
+          <p><a href="https://access.redhat.com/security/cve/cve-2016-5195">Red Hat</a>. <a href="https://security-tracker.debian.org/tracker/CVE-2016-5195">Debian</a>. <a href="http://people.canonical.com/~ubuntu-security/cve/2016/CVE-2016-5195.html">Ubuntu</a>. <a href="https://www.suse.com/security/cve/CVE-2016-5195.html">SUSE</a>.</p>
+        </div>
+      </div>
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>How can Linux be fixed?</h4>
+          <p>Even though the actual code fix may appear trivial, the Linux team is the expert in fixing it properly so the fixed version or newer should be used. If this is not possible software developers can recompile Linux with the <a href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=19be0eaffa3ac7d8eb6784ad9bdbc7d67ed8e619">fix</a> applied.</p>
+
+          <h4>How do I uninstall Linux?</h4>
+          <p>Please follow <script>document.write('<a href="' + (!navigator.userAgent.match(/Android/)?'https://youtu.be/MZrdrfdAl44?t=14':'https://youtu.be/t_VdJJErdVs?t=62') + '">these</a>');</script> instructions.</p>
+
+          <h4>Can I detect if someone has exploited this against me?</h4>
+          <p>Exploitation of this bug does not leave any trace of anything abnormal happening to the logs.</p>
+          
+          <h4>Has this been <a href="https://youtu.be/hL9iYboM3MU">exploited</a> in the wild?</h4>
+          <p><a href="https://bugzilla.redhat.com/show_bug.cgi?id=1384344#c16">Maybe</a>. Maybe not. We don't know. Security community should deploy honeypots that entrap attackers and to alert about exploitation attempts.</p>
+          
+          <h4>Who found the Dirty COW vulnerability?</h4>
+          <p><a href="https://access.redhat.com/security/cve/CVE-2016-5195">Phil Oester</a></p>
+        </div>
+
+        <div class="col-lg-6">
+          <h4>What's with the stupid (logo|website|<a href="//twitter.com/DirtyCowVuln">twitter</a>|github account)?</h4>
+          <p>It would have been fantastic to eschew this ridiculousness, because we all make fun of branded vulnerabilities too, but this was not the right time to make that stand. So we created a website, an online shop, a twitter account, and used a logo that a professional designer created.</p>
+
+          <h4>What can be done to prevent this from happening in future?</h4>
+          <p>The security community, we included, must learn to find these inevitable human mistakes sooner. Please support the development effort of software you trust your privacy to. <a href="https://www.freebsd.org/donations/">Donate money to the FreeBSD project</a>.</p>
+
+          <h4>Is there <a href="https://youtu.be/jHPOzQzk9Qo">a bright side</a> to all this?</h4>
+          <p>For those service providers who are affected, this is a good opportunity to upgrade security strength of the systems used. A lot of software gets updates which otherwise would have not been urgent. Although this is painful for the security community, we can rest assured that infrastructure of the cyber criminals and their secrets have been exposed as well.</p>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <p>Dirty COW is a community-maintained project for the bug otherwise known as CVE-2016-5195. It is not associated with the Linux Foundation, nor with the original discoverer of this vulnerability. If you would like to contribute go to <a href="//github.com/dirtycow/dirtycow.github.io">GitHub</a>.</p>
+      </footer>
+
+    </div>
+  </body>
+</html>
