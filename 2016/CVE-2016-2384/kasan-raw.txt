@@ -1,0 +1,171 @@
+[   25.262415] ==================================================================
+[   25.263553] BUG: KASAN: use-after-free in snd_usbmidi_free+0x92/0xa0 at addr ffff88006a8c5da0
+[   25.264851] Read of size 8 by task kworker/0:2/928
+[   25.265589] =============================================================================
+[   25.266802] BUG kmalloc-512 (Not tainted): kasan: bad access detected
+[   25.267736] -----------------------------------------------------------------------------
+[   25.267736] 
+[   25.269137] Disabling lock debugging due to kernel taint
+[   25.269926] INFO: Allocated in snd_usbmidi_create+0xb4/0x1dc0 age=1 cpu=0 pid=928
+[   25.271023]  ___slab_alloc+0x44f/0x470
+[   25.271583]  __slab_alloc+0x1b/0x30
+[   25.272103]  kmem_cache_alloc_trace+0x126/0x160
+[   25.272774]  snd_usbmidi_create+0xb4/0x1dc0
+[   25.273399]  create_any_midi_quirk+0x38/0x60
+[   25.274033]  snd_usb_create_quirk+0x74/0x110
+[   25.274670]  usb_audio_probe+0x43b/0x1d40
+[   25.275262]  usb_probe_interface+0x42c/0x8c0
+[   25.275894]  driver_probe_device+0x4be/0x800
+[   25.276528]  __device_attach_driver+0x176/0x220
+[   25.277199]  bus_for_each_drv+0x112/0x1b0
+[   25.277804]  __device_attach+0x1c6/0x2a0
+[   25.278362]  device_initial_probe+0xe/0x10
+[   25.278941]  bus_probe_device+0x199/0x240
+[   25.279509]  device_add+0x94c/0x1340
+[   25.280020]  usb_set_configuration+0xaec/0x1540
+[   25.280663] INFO: Freed in snd_usbmidi_free+0x7f/0xa0 age=1 cpu=0 pid=928
+[   25.281608]  __slab_free+0x170/0x290
+[   25.282123]  kfree+0x13b/0x150
+[   25.282562]  snd_usbmidi_free+0x7f/0xa0
+[   25.283104]  snd_usbmidi_create+0x11bc/0x1dc0
+[   25.283702]  create_any_midi_quirk+0x38/0x60
+[   25.284323]  snd_usb_create_quirk+0x74/0x110
+[   25.284932]  usb_audio_probe+0x43b/0x1d40
+[   25.285505]  usb_probe_interface+0x42c/0x8c0
+[   25.286121]  driver_probe_device+0x4be/0x800
+[   25.286665]  __device_attach_driver+0x176/0x220
+[   25.287227]  bus_for_each_drv+0x112/0x1b0
+[   25.287725]  __device_attach+0x1c6/0x2a0
+[   25.288213]  device_initial_probe+0xe/0x10
+[   25.288721]  bus_probe_device+0x199/0x240
+[   25.289219]  device_add+0x94c/0x1340
+[   25.289677]  usb_set_configuration+0xaec/0x1540
+[   25.290319] INFO: Slab 0xffffea0001aa3100 objects=10 used=0 fp=0xffff88006a8c5cb0 flags=0x100000000004080
+[   25.291648] INFO: Object 0xffff88006a8c5cb0 @offset=7344 fp=0xffff88006a8c4330
+[   25.291648] 
+[   25.292848] Bytes b4 ffff88006a8c5ca0: 00 00 00 00 49 0a 00 00 33 b8 fb ff 00 00 00 00  ....I...3.......
+[   25.294156] Object ffff88006a8c5cb0: 30 43 8c 6a 00 88 ff ff 20 67 6b 6c 00 88 ff ff  0C.j.... gkl....
+[   25.295231] Object ffff88006a8c5cc0: 60 ca be 6a 00 88 ff ff 40 28 30 83 ff ff ff ff  `..j....@(0.....
+[   25.296304] Object ffff88006a8c5cd0: 80 c9 76 6b 00 88 ff ff 80 0e 98 83 ff ff ff ff  ..vk............
+[   25.297531] Object ffff88006a8c5ce0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.298791] Object ffff88006a8c5cf0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.300014] Object ffff88006a8c5d00: 00 00 00 00 00 00 00 00 c0 ae 6b 82 ff ff ff ff  ..........k.....
+[   25.301237] Object ffff88006a8c5d10: b0 5c 8c 6a 00 88 ff ff 00 00 00 00 ff ff ff ff  .\.j............
+[   25.302469] Object ffff88006a8c5d20: ff ff ff ff 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.303695] Object ffff88006a8c5d30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.304916] Object ffff88006a8c5d40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.306135] Object ffff88006a8c5d50: 50 5d 8c 6a 00 88 ff ff 50 5d 8c 6a 00 88 ff ff  P].j....P].j....
+[   25.307303] Object ffff88006a8c5d60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.308478] Object ffff88006a8c5d70: 01 00 00 00 00 00 00 00 78 5d 8c 6a 00 88 ff ff  ........x].j....
+[   25.309649] Object ffff88006a8c5d80: 78 5d 8c 6a 00 88 ff ff 00 00 00 00 00 00 00 00  x].j............
+[   25.310830] Object ffff88006a8c5d90: 00 00 00 00 00 00 00 00 33 10 63 07 01 00 00 00  ........3.c.....
+[   25.312007] Object ffff88006a8c5da0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.313176] Object ffff88006a8c5db0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.314342] Object ffff88006a8c5dc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.315511] Object ffff88006a8c5dd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.316682] Object ffff88006a8c5de0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.317861] Object ffff88006a8c5df0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.318986] Object ffff88006a8c5e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.320100] Object ffff88006a8c5e10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.321225] Object ffff88006a8c5e20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.322355] Object ffff88006a8c5e30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.323475] Object ffff88006a8c5e40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.324586] Object ffff88006a8c5e50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.325706] Object ffff88006a8c5e60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.326826] Object ffff88006a8c5e70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.327937] Object ffff88006a8c5e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.329049] Object ffff88006a8c5e90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.330133] Object ffff88006a8c5ea0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+[   25.331131] CPU: 0 PID: 928 Comm: kworker/0:2 Tainted: G    B           4.4.0 #7
+[   25.331922] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.7.5-0-ge51488c-20140602_164612-nilsson.home.kraxel.org 04/01/2014
+[   25.333297] Workqueue: usb_hub_wq hub_event
+[   25.333766]  ffff88006a8c4000 ffff88006b616e50 ffffffff819f6215 ffff88006cc02200
+[   25.334622]  ffff88006b616e80 ffffffff81431c84 ffff88006cc02200 ffffea0001aa3100
+[   25.335476]  ffff88006a8c5cb0 ffff88006a8c5cb0 ffff88006b616ea8 ffffffff81436c7f
+[   25.336326] Call Trace:
+[   25.336602]  [<ffffffff819f6215>] dump_stack+0x44/0x5f
+[   25.337162]  [<ffffffff81431c84>] print_trailer+0xf4/0x150
+[   25.337764]  [<ffffffff81436c7f>] object_err+0x2f/0x40
+[   25.338323]  [<ffffffff81438e9d>] kasan_report_error+0x20d/0x520
+[   25.338973]  [<ffffffff814353f2>] ? __slab_free+0x1a2/0x290
+[   25.339604]  [<ffffffff814385b6>] ? kasan_unpoison_shadow+0x36/0x50
+[   25.340283]  [<ffffffff8157dda7>] ? proc_entry_rundown+0xb7/0x190
+[   25.340949]  [<ffffffff814392ae>] __asan_report_load8_noabort+0x3e/0x40
+[   25.341681]  [<ffffffff826baa72>] ? snd_usbmidi_free+0x92/0xa0
+[   25.342303]  [<ffffffff826baa72>] snd_usbmidi_free+0x92/0xa0
+[   25.342899]  [<ffffffff826baab2>] snd_usbmidi_rawmidi_free+0x32/0x40
+[   25.343525]  [<ffffffff825f2f7f>] snd_rawmidi_free+0x11f/0x170
+[   25.344065]  [<ffffffff825f2ffc>] snd_rawmidi_dev_free+0x2c/0x40
+[   25.344617]  [<ffffffff825aa565>] __snd_device_free+0x125/0x210
+[   25.345158]  [<ffffffff825aad10>] snd_device_free_all+0x80/0xc0
+[   25.345745]  [<ffffffff8259b24f>] release_card_device+0x2f/0x130
+[   25.346366]  [<ffffffff8202f6e1>] device_release+0x71/0x1e0
+[   25.347086]  [<ffffffff819fbd81>] kobject_release+0xc1/0x160
+[   25.348214]  [<ffffffff819fb9fe>] kobject_put+0x4e/0xa0
+[   25.349420]  [<ffffffff8202fd42>] put_device+0x12/0x20
+[   25.350574]  [<ffffffff8259d6ac>] snd_card_free+0xac/0xf0
+[   25.351768]  [<ffffffff8259d600>] ? snd_card_free_when_closed+0x30/0x30
+[   25.353218]  [<ffffffff826b2374>] ? snd_usb_create_quirk+0x74/0x110
+[   25.354572]  [<ffffffff826aff65>] ? snd_usb_audio_create_proc+0x115/0x1e0
+[   25.355887]  [<ffffffff8267eb9a>] usb_audio_probe+0x77a/0x1d40
+[   25.357040]  [<ffffffff8267e420>] ? snd_usb_create_stream+0x480/0x480
+[   25.357858]  [<ffffffff82056ee6>] ? __pm_runtime_set_status+0x496/0x960
+[   25.358472]  [<ffffffff82317a8c>] usb_probe_interface+0x42c/0x8c0
+[   25.359039]  [<ffffffff8203c79e>] driver_probe_device+0x4be/0x800
+[   25.359602]  [<ffffffff8203cda6>] __device_attach_driver+0x176/0x220
+[   25.360186]  [<ffffffff8203cc30>] ? __driver_attach+0x150/0x150
+[   25.360731]  [<ffffffff82037682>] bus_for_each_drv+0x112/0x1b0
+[   25.361271]  [<ffffffff82037570>] ? bus_rescan_devices+0x20/0x20
+[   25.361830]  [<ffffffff82e6b129>] ? _raw_spin_unlock_irqrestore+0x9/0x10
+[   25.362445]  [<ffffffff8203c1d6>] __device_attach+0x1c6/0x2a0
+[   25.362971]  [<ffffffff8203c010>] ? device_bind_driver+0x30/0x30
+[   25.363524]  [<ffffffff819fe492>] ? kobject_uevent_env+0x202/0xa50
+[   25.364090]  [<ffffffff8203cebe>] device_initial_probe+0xe/0x10
+[   25.364632]  [<ffffffff8203a299>] bus_probe_device+0x199/0x240
+[   25.365166]  [<ffffffff8203447c>] device_add+0x94c/0x1340
+[   25.365670]  [<ffffffff82033b30>] ? device_private_init+0x180/0x180
+[   25.366237]  [<ffffffff8204ee24>] ? wakeup_sysfs_add+0x14/0x20
+[   25.366757]  [<ffffffff82061b20>] ? device_set_wakeup_capable+0xc0/0x160
+[   25.367354]  [<ffffffff82310d3c>] usb_set_configuration+0xaec/0x1540
+[   25.367919]  [<ffffffff8232e516>] generic_probe+0x56/0xb0
+[   25.368402]  [<ffffffff8231762a>] usb_probe_device+0x8a/0xc0
+[   25.368908]  [<ffffffff8203c79e>] driver_probe_device+0x4be/0x800
+[   25.369451]  [<ffffffff8203cda6>] __device_attach_driver+0x176/0x220
+[   25.370019]  [<ffffffff8203cc30>] ? __driver_attach+0x150/0x150
+[   25.370548]  [<ffffffff82037682>] bus_for_each_drv+0x112/0x1b0
+[   25.371068]  [<ffffffff82037570>] ? bus_rescan_devices+0x20/0x20
+[   25.371604]  [<ffffffff82e6b129>] ? _raw_spin_unlock_irqrestore+0x9/0x10
+[   25.372199]  [<ffffffff8203c1d6>] __device_attach+0x1c6/0x2a0
+[   25.372708]  [<ffffffff8203c010>] ? device_bind_driver+0x30/0x30
+[   25.373248]  [<ffffffff819fe492>] ? kobject_uevent_env+0x202/0xa50
+[   25.373804]  [<ffffffff8203cebe>] device_initial_probe+0xe/0x10
+[   25.374320]  [<ffffffff8203a299>] bus_probe_device+0x199/0x240
+[   25.374839]  [<ffffffff8203447c>] device_add+0x94c/0x1340
+[   25.375323]  [<ffffffff82033b30>] ? device_private_init+0x180/0x180
+[   25.375883]  [<ffffffff822f41a1>] usb_new_device+0x701/0xfa0
+[   25.376386]  [<ffffffff822f8580>] hub_event+0x1b70/0x2d00
+[   25.376870]  [<ffffffff822f6a10>] ? hub_port_debounce+0x1b0/0x1b0
+[   25.377413]  [<ffffffff82050101>] ? dev_pm_get_subsys_data+0x71/0x1c0
+[   25.377994]  [<ffffffff8100a4fc>] ? __switch_to+0x7ac/0xe40
+[   25.378492]  [<ffffffff82e6b129>] ? _raw_spin_unlock_irqrestore+0x9/0x10
+[   25.379068]  [<ffffffff820575cd>] ? __pm_runtime_suspend+0x8d/0xb0
+[   25.379620]  [<ffffffff8113622f>] ? pwq_dec_nr_in_flight+0x11f/0x270
+[   25.380187]  [<ffffffff822f682d>] ? usb_remote_wakeup+0x4d/0x80
+[   25.380720]  [<ffffffff81137375>] process_one_work+0x585/0x1200
+[   25.381249]  [<ffffffff811380c7>] worker_thread+0xd7/0x1200
+[   25.381742]  [<ffffffff82e608b5>] ? __schedule+0x935/0x1d60
+[   25.382242]  [<ffffffff81137ff0>] ? process_one_work+0x1200/0x1200
+[   25.382791]  [<ffffffff81148ba0>] kthread+0x1c0/0x260
+[   25.383242]  [<ffffffff811489e0>] ? kthread_worker_fn+0x580/0x580
+[   25.383784]  [<ffffffff8100a4fc>] ? __switch_to+0x7ac/0xe40
+[   25.384280]  [<ffffffff811489e0>] ? kthread_worker_fn+0x580/0x580
+[   25.384824]  [<ffffffff82e6bb4f>] ret_from_fork+0x3f/0x70
+[   25.385304]  [<ffffffff811489e0>] ? kthread_worker_fn+0x580/0x580
+[   25.385846] Memory state around the buggy address:
+[   25.386271]  ffff88006a8c5c80: fc fc fc fc fc fc fb fb fb fb fb fb fb fb fb fb
+[   25.386906]  ffff88006a8c5d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[   25.387548] >ffff88006a8c5d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[   25.388184]                                ^
+[   25.388565]  ffff88006a8c5e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+[   25.389202]  ffff88006a8c5e80: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+[   25.389844] ==================================================================

@@ -1,0 +1,152 @@
+==================================================================
+BUG: KASAN: use-after-free in snd_usbmidi_free+0x92/0xa0 at addr ffff88006a8c5da0
+Read of size 8 by task kworker/0:2/928
+=============================================================================
+BUG kmalloc-512 (Not tainted): kasan: bad access detected
+-----------------------------------------------------------------------------
+
+Disabling lock debugging due to kernel taint
+INFO: Allocated in snd_usbmidi_create+0xb4/0x1dc0 age=1 cpu=0 pid=928
+[<      none      >] ___slab_alloc+0x44f/0x470 mm/slub.c:2438
+[<      none      >] __slab_alloc+0x1b/0x30 mm/slub.c:2467
+[<     inline     >] slab_alloc_node mm/slub.c:2530
+[<     inline     >] slab_alloc mm/slub.c:2572
+[<      none      >] kmem_cache_alloc_trace+0x126/0x160 mm/slub.c:2589
+[<     inline     >] kmalloc include/linux/slab.h:458
+[<     inline     >] kzalloc include/linux/slab.h:602
+[<      none      >] snd_usbmidi_create+0xb4/0x1dc0 sound/usb/midi.c:2332
+[<      none      >] create_any_midi_quirk+0x38/0x60 sound/usb/quirks.c:103
+[<      none      >] snd_usb_create_quirk+0x74/0x110 sound/usb/quirks.c:550
+[<      none      >] usb_audio_probe+0x43b/0x1d40 sound/usb/card.c:544
+[<      none      >] usb_probe_interface+0x42c/0x8c0 drivers/usb/core/driver.c:356
+[<     inline     >] really_probe drivers/base/dd.c:316
+[<      none      >] driver_probe_device+0x4be/0x800 drivers/base/dd.c:429
+[<      none      >] __device_attach_driver+0x176/0x220 drivers/base/dd.c:514
+[<      none      >] bus_for_each_drv+0x112/0x1b0 drivers/base/bus.c:464
+[<      none      >] __device_attach+0x1c6/0x2a0 drivers/base/dd.c:571
+[<      none      >] device_initial_probe+0xe/0x10 drivers/base/dd.c:618
+[<      none      >] bus_probe_device+0x199/0x240 drivers/base/bus.c:558
+[<      none      >] device_add+0x94c/0x1340 drivers/base/core.c:1120
+[<      none      >] usb_set_configuration+0xaec/0x1540 drivers/usb/core/message.c:1932
+INFO: Freed in snd_usbmidi_free+0x7f/0xa0 age=1 cpu=0 pid=928
+[<      none      >] __slab_free+0x170/0x290 mm/slub.c:2648
+[<     inline     >] slab_free mm/slub.c:2803
+[<      none      >] kfree+0x13b/0x150 mm/slub.c:3632
+[<      none      >] snd_usbmidi_free+0x7f/0xa0 sound/usb/midi.c:1455
+[<      none      >] snd_usbmidi_create+0x11bc/0x1dc0 sound/usb/midi.c:2457
+[<      none      >] create_any_midi_quirk+0x38/0x60 sound/usb/quirks.c:103
+[<      none      >] snd_usb_create_quirk+0x74/0x110 sound/usb/quirks.c:550
+[<      none      >] usb_audio_probe+0x43b/0x1d40 sound/usb/card.c:544
+[<      none      >] usb_probe_interface+0x42c/0x8c0 drivers/usb/core/driver.c:356
+[<     inline     >] really_probe drivers/base/dd.c:316
+[<      none      >] driver_probe_device+0x4be/0x800 drivers/base/dd.c:429
+[<      none      >] __device_attach_driver+0x176/0x220 drivers/base/dd.c:514
+[<      none      >] bus_for_each_drv+0x112/0x1b0 drivers/base/bus.c:464
+[<      none      >] __device_attach+0x1c6/0x2a0 drivers/base/dd.c:571
+[<      none      >] device_initial_probe+0xe/0x10 drivers/base/dd.c:618
+[<      none      >] bus_probe_device+0x199/0x240 drivers/base/bus.c:558
+[<      none      >] device_add+0x94c/0x1340 drivers/base/core.c:1120
+[<      none      >] usb_set_configuration+0xaec/0x1540 drivers/usb/core/message.c:1932
+INFO: Slab 0xffffea0001aa3100 objects=10 used=0 fp=0xffff88006a8c5cb0 flags=0x100000000004080
+INFO: Object 0xffff88006a8c5cb0 @offset=7344 fp=0xffff88006a8c4330
+
+Bytes b4 ffff88006a8c5ca0: 00 00 00 00 49 0a 00 00 33 b8 fb ff 00 00 00 00  ....I...3.......
+Object ffff88006a8c5cb0: 30 43 8c 6a 00 88 ff ff 20 67 6b 6c 00 88 ff ff  0C.j.... gkl....
+Object ffff88006a8c5cc0: 60 ca be 6a 00 88 ff ff 40 28 30 83 ff ff ff ff  `..j....@(0.....
+Object ffff88006a8c5cd0: 80 c9 76 6b 00 88 ff ff 80 0e 98 83 ff ff ff ff  ..vk............
+Object ffff88006a8c5ce0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5cf0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5d00: 00 00 00 00 00 00 00 00 c0 ae 6b 82 ff ff ff ff  ..........k.....
+Object ffff88006a8c5d10: b0 5c 8c 6a 00 88 ff ff 00 00 00 00 ff ff ff ff  .\.j............
+Object ffff88006a8c5d20: ff ff ff ff 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5d30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5d40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5d50: 50 5d 8c 6a 00 88 ff ff 50 5d 8c 6a 00 88 ff ff  P].j....P].j....
+Object ffff88006a8c5d60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5d70: 01 00 00 00 00 00 00 00 78 5d 8c 6a 00 88 ff ff  ........x].j....
+Object ffff88006a8c5d80: 78 5d 8c 6a 00 88 ff ff 00 00 00 00 00 00 00 00  x].j............
+Object ffff88006a8c5d90: 00 00 00 00 00 00 00 00 33 10 63 07 01 00 00 00  ........3.c.....
+Object ffff88006a8c5da0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5db0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5dc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5dd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5de0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5df0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e20: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e30: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5e90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+Object ffff88006a8c5ea0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+CPU: 0 PID: 928 Comm: kworker/0:2 Tainted: G    B           4.4.0 #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.7.5-0-ge51488c-20140602_164612-nilsson.home.kraxel.org 04/01/2014
+Workqueue: usb_hub_wq hub_event
+ ffff88006a8c4000 ffff88006b616e50 ffffffff819f6215 ffff88006cc02200
+ ffff88006b616e80 ffffffff81431c84 ffff88006cc02200 ffffea0001aa3100
+ ffff88006a8c5cb0 ffff88006a8c5cb0 ffff88006b616ea8 ffffffff81436c7f
+Call Trace:
+ [<     inline     >] __dump_stack lib/dump_stack.c:15
+ [<ffffffff819f6215>] dump_stack+0x44/0x5f lib/dump_stack.c:50
+ [<ffffffff81431c84>] print_trailer+0xf4/0x150 mm/slub.c:652
+ [<ffffffff81436c7f>] object_err+0x2f/0x40 mm/slub.c:659
+ [<     inline     >] print_address_description mm/kasan/report.c:138
+ [<ffffffff81438e9d>] kasan_report_error+0x20d/0x520 mm/kasan/report.c:236
+ [<     inline     >] kasan_report mm/kasan/report.c:259
+ [<ffffffff814392ae>] __asan_report_load8_noabort+0x3e/0x40 mm/kasan/report.c:280
+ [<ffffffff826baa72>] snd_usbmidi_free+0x92/0xa0 sound/usb/midi.c:1449
+ [<ffffffff826baab2>] snd_usbmidi_rawmidi_free+0x32/0x40 sound/usb/midi.c:1511
+ [<ffffffff825f2f7f>] snd_rawmidi_free+0x11f/0x170 sound/core/rawmidi.c:1546
+ [<ffffffff825f2ffc>] snd_rawmidi_dev_free+0x2c/0x40 sound/core/rawmidi.c:1554
+ [<ffffffff825aa565>] __snd_device_free+0x125/0x210 sound/core/device.c:91
+ [<ffffffff825aad10>] snd_device_free_all+0x80/0xc0 sound/core/device.c:244
+ [<     inline     >] snd_card_do_free sound/core/init.c:461
+ [<ffffffff8259b24f>] release_card_device+0x2f/0x130 sound/core/init.c:181
+ [<ffffffff8202f6e1>] device_release+0x71/0x1e0 drivers/base/core.c:247
+ [<     inline     >] kobject_cleanup lib/kobject.c:645
+ [<ffffffff819fbd81>] kobject_release+0xc1/0x160 lib/kobject.c:674
+ [<     inline     >] kref_put include/linux/kref.h:73
+ [<ffffffff819fb9fe>] kobject_put+0x4e/0xa0 lib/kobject.c:691
+ [<ffffffff8202fd42>] put_device+0x12/0x20 drivers/base/core.c:1215
+ [<     inline     >] snd_card_free_when_closed sound/core/init.c:489
+ [<ffffffff8259d6ac>] snd_card_free+0xac/0xf0 sound/core/init.c:514
+ [<ffffffff8267eb9a>] usb_audio_probe+0x77a/0x1d40 sound/usb/card.c:574
+ [<ffffffff82317a8c>] usb_probe_interface+0x42c/0x8c0 drivers/usb/core/driver.c:356
+ [<     inline     >] really_probe drivers/base/dd.c:316
+ [<ffffffff8203c79e>] driver_probe_device+0x4be/0x800 drivers/base/dd.c:429
+ [<ffffffff8203cda6>] __device_attach_driver+0x176/0x220 drivers/base/dd.c:514
+ [<ffffffff82037682>] bus_for_each_drv+0x112/0x1b0 drivers/base/bus.c:464
+ [<ffffffff8203c1d6>] __device_attach+0x1c6/0x2a0 drivers/base/dd.c:571
+ [<ffffffff8203cebe>] device_initial_probe+0xe/0x10 drivers/base/dd.c:618
+ [<ffffffff8203a299>] bus_probe_device+0x199/0x240 drivers/base/bus.c:558
+ [<ffffffff8203447c>] device_add+0x94c/0x1340 drivers/base/core.c:1120
+ [<ffffffff82310d3c>] usb_set_configuration+0xaec/0x1540 drivers/usb/core/message.c:1932
+ [<ffffffff8232e516>] generic_probe+0x56/0xb0 drivers/usb/core/generic.c:172
+ [<ffffffff8231762a>] usb_probe_device+0x8a/0xc0 drivers/usb/core/driver.c:263
+ [<     inline     >] really_probe drivers/base/dd.c:316
+ [<ffffffff8203c79e>] driver_probe_device+0x4be/0x800 drivers/base/dd.c:429
+ [<ffffffff8203cda6>] __device_attach_driver+0x176/0x220 drivers/base/dd.c:514
+ [<ffffffff82037682>] bus_for_each_drv+0x112/0x1b0 drivers/base/bus.c:464
+ [<ffffffff8203c1d6>] __device_attach+0x1c6/0x2a0 drivers/base/dd.c:571
+ [<ffffffff8203cebe>] device_initial_probe+0xe/0x10 drivers/base/dd.c:618
+ [<ffffffff8203a299>] bus_probe_device+0x199/0x240 drivers/base/bus.c:558
+ [<ffffffff8203447c>] device_add+0x94c/0x1340 drivers/base/core.c:1120
+ [<ffffffff822f41a1>] usb_new_device+0x701/0xfa0 drivers/usb/core/hub.c:2499
+ [<     inline     >] port_event drivers/usb/core/hub.c:4798
+ [<ffffffff822f8580>] hub_event+0x1b70/0x2d00 drivers/usb/core/hub.c:5089
+ [<ffffffff81137375>] process_one_work+0x585/0x1200 kernel/workqueue.c:2030
+ [<ffffffff811380c7>] worker_thread+0xd7/0x1200 kernel/workqueue.c:2162
+ [<ffffffff81148ba0>] kthread+0x1c0/0x260 kernel/kthread.c:209
+ [<ffffffff82e6bb4f>] ret_from_fork+0x3f/0x70 arch/x86/entry/entry_64.S:468
+Memory state around the buggy address:
+ ffff88006a8c5c80: fc fc fc fc fc fc fb fb fb fb fb fb fb fb fb fb
+ ffff88006a8c5d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88006a8c5d80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                               ^
+ ffff88006a8c5e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88006a8c5e80: fb fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc
+==================================================================
